@@ -8,9 +8,11 @@
    @carta-selecionada="virarCarta"/>
  </section>
  <h2>{{ status }}</h2>
+ <button @click="embaralharCartas">Embaralhar</button>
 </template>
 
 <script>
+import _ from 'lodash'
 import { computed, ref , watch } from 'vue'
 import Carta from "./components/Carta"
 
@@ -37,10 +39,14 @@ export default {
        return cartasRestantes / 2 
     })
 
+    const embaralharCartas = () => {
+      cartaLista.value = _.shuffle(cartaLista.value)
+    }
+
     for (let i = 0; i < 20; i++){
       cartaLista.value.push({
-        valor: 5,
-        visivel: false,
+        valor: i,
+        visivel: true,
         posicao: i,
         combinou: false
       })
@@ -80,6 +86,7 @@ export default {
         virarCarta,
         usuarioSelecionou,
         status,
+        embaralharCartas
       }
 
   }
