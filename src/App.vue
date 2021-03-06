@@ -1,33 +1,30 @@
 <template>
  <h1>Jogo da Memória</h1>
  <section class="tabuleiro">
-   <div class="carta"></div>
-   <div class="carta"></div>
-   <div class="carta"></div>
-   <div class="carta"></div>
-   <div class="carta"></div>
-   <div class="carta"></div>
-   <div class="carta"></div>
-   <div class="carta"></div>
-   <div class="carta"></div>
-   <div class="carta"></div>
-   <div class="carta"></div>
-   <div class="carta"></div>
-   <div class="carta"></div>
-   <div class="carta"></div>
-   <div class="carta"></div>
-   <div class="carta"></div>
-   <div class="carta"></div>
-   <div class="carta"></div>
-   <div class="carta"></div>
-   <div class="carta"></div>
+   <Carta v-for="(carta, index) in cartaLista" :key="`carta-${index}`" :valor="carta"/>
  </section>
 </template>
 
 <script>
+import Carta from "./components/Carta"
 
 export default {
   name: 'App',
+  components:{
+    Carta
+  },
+  setup(){
+    const cartaLista = []
+
+    for (let i = 0; i < 20; i++){
+      cartaLista.push(i)
+    }
+
+    return{
+      cartaLista
+    }
+
+  }
 }
 </script>
 
