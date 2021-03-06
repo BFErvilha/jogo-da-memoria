@@ -1,7 +1,7 @@
 <template>
   <div class="carta" @click="selecionarCarta">
     <div v-if="visivel" class="carta-face frente">
-      {{valor}}
+      {{valor}} - {{combinou}}
     </div>
     <div v-else class="carta-face costas">
       costas
@@ -23,12 +23,17 @@ export default {
     posicao:{
       type: Number,
       required: true,
-    }  
+    },
+    combinou: {
+      type: Boolean,
+      default: false,
+    }
   },
   setup( props , context){
     const selecionarCarta = () => {
       context.emit('carta-selecionada', {
-        posicao: props.posicao
+        posicao: props.posicao,
+        cartaValor: props.valor
       })
     }
     return {
