@@ -1,16 +1,33 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+ <h1>Jogo da Memória</h1>
+ <section class="tabuleiro">
+   <div class="carta"></div>
+   <div class="carta"></div>
+   <div class="carta"></div>
+   <div class="carta"></div>
+   <div class="carta"></div>
+   <div class="carta"></div>
+   <div class="carta"></div>
+   <div class="carta"></div>
+   <div class="carta"></div>
+   <div class="carta"></div>
+   <div class="carta"></div>
+   <div class="carta"></div>
+   <div class="carta"></div>
+   <div class="carta"></div>
+   <div class="carta"></div>
+   <div class="carta"></div>
+   <div class="carta"></div>
+   <div class="carta"></div>
+   <div class="carta"></div>
+   <div class="carta"></div>
+ </section>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 
 export default {
   name: 'App',
-  components: {
-    HelloWorld
-  }
 }
 </script>
 
@@ -22,5 +39,18 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.carta{
+  border: 5px solid #c3c4cc
+}
+
+.tabuleiro{
+  display: grid;
+  grid-template-columns:  100px 100px 100px 100px;
+  grid-template-rows: 150px 150px 150px 150px 150px;
+  grid-column-gap: 30px;
+  grid-row-gap: 30px;
+  justify-content: center;
 }
 </style>
