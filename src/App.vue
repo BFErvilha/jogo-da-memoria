@@ -11,7 +11,7 @@
 </template>
 
 <script>
-import { ref , watch } from 'vue'
+import { computed, ref , watch } from 'vue'
 import Carta from "./components/Carta"
 
 export default {
@@ -22,11 +22,24 @@ export default {
   setup(){
     const cartaLista = ref([])
     const usuarioSelecionou = ref ([])
-    const status = ref ('')
+    
+    const status = computed(()=> {
+      if(paresRestantes.value === 0){
+         return 'Parabéns, você venceu!'
+      } else {
+        return `Pares restantes: ${paresRestantes.value}`
+      }
+    })
+
+    const paresRestantes = computed(() => {
+      const cartasRestantes =  cartaLista.value.filter(carta => carta.combinou === false).length
+
+       return cartasRestantes / 2 
+    })
 
     for (let i = 0; i < 20; i++){
       cartaLista.value.push({
-        valor: i,
+        valor: 5,
         visivel: false,
         posicao: i,
         combinou: false
@@ -66,8 +79,7 @@ export default {
         cartaLista,
         virarCarta,
         usuarioSelecionou,
-        status
-
+        status,
       }
 
   }
