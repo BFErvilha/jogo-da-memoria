@@ -1,7 +1,12 @@
 <template>
   <div class="titulo"> 
+    <img src="../public/assets/img/abstergo_logo.png" alt="Abstergo"/>
     <h1>Abstergo Memory</h1>
-  </div>  
+  </div>
+  <section class="subtitulo">
+    <p>Bem-vindo ao jogo da memória!</p>
+    <p>Tematizado com o jogo da ubisoft Assassin's Creed</p>  
+  </section>  
  <transition-group tag="section" name="embaralhar-cartas" class="tabuleiro">
    <Carta v-for="carta in cartaLista" :key="`${carta.valor}-${carta.variante}`" :valor="carta.valor"
    :combinou="carta.combinou"
@@ -9,8 +14,12 @@
    :posicao="carta.posicao"
    @carta-selecionada="virarCarta"/>
  </transition-group>
- <h2>{{ status }}</h2>
- <button @click="reiniciarJogo" class="btn">
+ <h2 class="status">{{ status }}</h2>
+ <button v-if="novoJogador" @click="iniciarJogo" class="btn">
+   <img src="../public/assets/img/play.svg" alt="Reiniciar icone"/>
+   Iniciar Jogo
+ </button>
+ <button v-else @click="reiniciarJogo" class="btn">
    <img src="../public/assets/img/restart.svg" alt="Reiniciar icone"/>
    ReiniciarJogo
  </button>
@@ -30,6 +39,13 @@ export default {
   setup(){
     const cartaLista = ref([])
     const usuarioSelecionou = ref ([])
+    const novoJogador = ref(true)
+
+    const iniciarJogo = () => {
+      novoJogador.value = false
+
+      reiniciarJogo()
+    }
     
     const status = computed(()=> {
       if(paresRestantes.value === 0){
@@ -72,7 +88,7 @@ export default {
       cartaLista.value.push({
         valor: item,
         variante: 2,
-        visivel: false,
+        visivel: true,
         posicao: null,
         combinou: false
       })
@@ -127,7 +143,9 @@ export default {
         virarCarta,
         usuarioSelecionou,
         status,
-        reiniciarJogo
+        reiniciarJogo,
+        iniciarJogo,
+        novoJogador
       }
 
   }
@@ -142,15 +160,29 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #fff;
-  margin-top: 60px;
+  margin-top: 10px;
   /* height: 100vh; */
 }
 
 .titulo h1{
   font-family: 'Assassin$ Regular';
   font-size: 60px;
-  margin: 30px auto;
+  margin: 10px auto 30px;
+}
 
+.titulo img{
+  width: 100px;
+  margin-top: 10px;
+}
+
+.subtitulo{
+  margin: 20px auto 40px;
+}
+
+.subtitulo p{
+  margin: 5px auto;
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .tabuleiro{
@@ -160,6 +192,12 @@ export default {
   grid-column-gap: 25px;
   grid-row-gap: 25px;
   justify-content: center;
+}
+
+.status{
+  margin: 25px auto;
+  font-size: 20px;
+  font-weight: 600;
 }
 
 .btn{
@@ -188,4 +226,5 @@ export default {
 .embaralhar-cartas-move{
   transition: transform 0.8s ease-in
 }
+
 </style>
