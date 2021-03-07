@@ -1,5 +1,7 @@
 <template>
- <h1>Jogo da Memória</h1>
+  <div class="titulo"> 
+    <h1>Abstergo Memory</h1>
+  </div>  
  <section class="tabuleiro">
    <Carta v-for="(carta, index) in cartaLista" :key="`carta-${index}`" :valor="carta.valor"
    :combinou="carta.combinou"
@@ -8,7 +10,10 @@
    @carta-selecionada="virarCarta"/>
  </section>
  <h2>{{ status }}</h2>
- <button @click="reiniciarJogo">ReiniciarJogo</button>
+ <button @click="reiniciarJogo" class="btn">
+   <img src="../public/assets/img/restart.svg" alt="Reiniciar icone"/>
+   ReiniciarJogo
+ </button>
 </template>
 
 <script>
@@ -56,7 +61,7 @@ export default {
       })
     }
 
-    const cartasItens = [ 0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 ]
+    const cartasItens = [ 'ac' , 'ac-2' , 'ac-3' , 'ac-black-flag-fc' , 'ac-black-flag' , 'ac-chronicles' , 'ac-liberation' , 'ac-revelations' , 'ac-syndicate' , 'ac-unity' ]
 
     cartasItens.forEach(item => {
       cartaLista.value.push({
@@ -86,6 +91,9 @@ export default {
       cartaLista.value[carta.posicao].visivel = true
 
       if (usuarioSelecionou.value[0]) {
+        if((usuarioSelecionou.value[0].posicao === carta.posicao && usuarioSelecionou.value[0].faceValor )=== carta.faceValor){
+          return
+        }
         usuarioSelecionou.value[1] = carta
         }else {
           usuarioSelecionou.value[0] = carta
@@ -123,21 +131,53 @@ export default {
 </script>
 
 <style>
+
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
+  color: #fff;
   margin-top: 60px;
+  /* height: 100vh; */
+}
+
+.titulo h1{
+  font-family: 'Assassin$ Regular';
+  font-size: 60px;
+  margin: 30px auto;
+
 }
 
 .tabuleiro{
   display: grid;
-  grid-template-columns:  100px 100px 100px 100px 100px;
-  grid-template-rows: 150px 150px 150px 150px;
-  grid-column-gap: 30px;
-  grid-row-gap: 30px;
+  grid-template-columns: repeat(5, 100px);
+  grid-template-rows: repeat(4, 150px);
+  grid-column-gap: 25px;
+  grid-row-gap: 25px;
   justify-content: center;
+}
+
+.btn{
+  background-color: #6a9eb8;
+  border: 1px solid #6a9eb8;
+  border-radius: 10px;
+  color: #fff;
+  padding: 0.75rem 0.5rem;
+  margin: 15px auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.btn:hover{
+  background-color: #afdcf0;
+  border-color: #afdcf0;
+}
+
+.btn img{
+  padding-right: 5px;
 }
 </style>
