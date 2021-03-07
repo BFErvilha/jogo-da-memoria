@@ -1,7 +1,7 @@
 <template>
   <div class="carta" @click="selecionarCarta">
     <div v-if="visivel" class="carta-face frente">
-      {{valor}} - {{combinou}}
+      {{valor}} - {{ posicao }}
     </div>
     <div v-else class="carta-face costas">
       costas

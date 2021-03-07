@@ -56,14 +56,31 @@ export default {
       })
     }
 
-    for (let i = 0; i < 20; i++){
+    const cartasItens = [ 0 , 1 , 2 , 3 , 4 , 5 , 6 , 7 , 8 , 9 ]
+
+    cartasItens.forEach(item => {
       cartaLista.value.push({
-        valor: i,
-        visivel: false,
-        posicao: i,
+        valor: item,
+        visivel: true,
+        posicao: null,
         combinou: false
       })
-    }
+
+      cartaLista.value.push({
+        valor: item,
+        visivel: true,
+        posicao: null,
+        combinou: false
+      })
+    })
+
+    cartaLista.value = cartaLista.value.map((carta,index) => {
+      return { 
+        ...carta,
+        posicao: index
+      }
+    })
+
 
     const virarCarta = (carta) => {
       cartaLista.value[carta.posicao].visivel = true
