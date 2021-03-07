@@ -19,6 +19,7 @@
 <script>
 import _ from 'lodash'
 import { computed, ref , watch } from 'vue'
+import { soltarConfete } from './utilities/confete'
 import Carta from "./components/Carta"
 
 export default {
@@ -97,11 +98,17 @@ export default {
           usuarioSelecionou.value[0] = carta
         }
       }
+
+      watch(paresRestantes, currentValue => {
+        if(currentValue === 0){
+          soltarConfete()
+        }
+      })
     
-      watch(usuarioSelecionou,(currentVlue) => {
-          if(currentVlue.length == 2){
-            const carta1 = currentVlue[0]
-            const carta2 = currentVlue[1]
+      watch(usuarioSelecionou,(currentValue) => {
+          if(currentValue.length == 2){
+            const carta1 = currentValue[0]
+            const carta2 = currentValue[1]
 
             if(carta1.cartaValor == carta2.cartaValor) {
               cartaLista.value[carta1.posicao].combinou = true;
