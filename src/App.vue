@@ -2,13 +2,13 @@
   <div class="titulo"> 
     <h1>Abstergo Memory</h1>
   </div>  
- <section class="tabuleiro">
-   <Carta v-for="(carta, index) in cartaLista" :key="`carta-${index}`" :valor="carta.valor"
+ <transition-group tag="section" name="embaralhar-cartas" class="tabuleiro">
+   <Carta v-for="carta in cartaLista" :key="`${carta.valor}-${carta.variante}`" :valor="carta.valor"
    :combinou="carta.combinou"
    :visivel="carta.visivel"
    :posicao="carta.posicao"
    @carta-selecionada="virarCarta"/>
- </section>
+ </transition-group>
  <h2>{{ status }}</h2>
  <button @click="reiniciarJogo" class="btn">
    <img src="../public/assets/img/restart.svg" alt="Reiniciar icone"/>
@@ -44,12 +44,8 @@ export default {
        return cartasRestantes / 2 
     })
 
-    const embaralharCartas = () => {
-      cartaLista.value = _.shuffle(cartaLista.value)
-    }
-
     const reiniciarJogo = () => {
-      embaralharCartas()
+      cartaLista.value = _.shuffle(cartaLista.value)
 
       cartaLista.value = cartaLista.value.map((carta,index) => {
         return { 
@@ -66,6 +62,7 @@ export default {
     cartasItens.forEach(item => {
       cartaLista.value.push({
         valor: item,
+        variante: 1,
         visivel: false,
         posicao: null,
         combinou: false
@@ -73,6 +70,7 @@ export default {
 
       cartaLista.value.push({
         valor: item,
+        variante: 2,
         visivel: false,
         posicao: null,
         combinou: false
@@ -122,7 +120,6 @@ export default {
         virarCarta,
         usuarioSelecionou,
         status,
-        embaralharCartas,
         reiniciarJogo
       }
 
@@ -179,5 +176,9 @@ export default {
 
 .btn img{
   padding-right: 5px;
+}
+
+.embaralhar-cartas-move{
+  transition: transform 0.8s ease-in
 }
 </style>
