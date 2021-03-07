@@ -1,14 +1,16 @@
 <template>
-  <div class="carta" @click="selecionarCarta">
-    <div v-if="visivel" class="carta-face frente">
+  <div class="carta" :class="virarEstilo" @click="selecionarCarta">
+    <div class="carta-face frente">
       <img :src="`/assets/img/cartas/${valor}.png`" :alt="valor">
       <img v-if="combinou" src="/assets/img/check-apple.png" alt="Carta Combinada" class="icone-check">
     </div>
-    <div v-else class="carta-face costas"></div>
+    <div class="carta-face costas"></div>
   </div>
 </template>
 
 <script>
+import { computed } from 'vue'
+
 export default {
   props:{
     valor: {
@@ -28,7 +30,17 @@ export default {
       default: false,
     }
   },
-  setup( props , context){
+  setup( props , context ){
+    const virarEstilo = computed(() => {
+      let virada
+
+      if(props.visivel){
+        virada = 'foi-virada'
+      }
+
+      return virada
+    })
+
     const selecionarCarta = () => {
       context.emit('carta-selecionada', {
         posicao: props.posicao,
@@ -36,7 +48,8 @@ export default {
       })
     }
     return {
-      selecionarCarta
+      selecionarCarta,
+      virarEstilo
     }
   }
 }
@@ -47,6 +60,12 @@ export default {
 .carta{
   position: relative;
   cursor: pointer;
+  transition: 0.5s transform ease-in;
+  transform-style: preserve-3d;
+}
+
+.carta.foi-virada{
+  transform: rotateY(180deg)
 }
 
 .carta:hover{
@@ -62,6 +81,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
+  backface-visibility: hidden;
 }
 
 .carta-face.frente{
@@ -71,10 +91,11 @@ export default {
 
 .carta-face.frente img{
   border-radius: 10px;
+  transform: rotateY(180deg);
 }
 .carta-face.costas{
   background-image: url('../../public/assets/img/carta-verso.png');
-  color: white
+  color: white;
 }
 
 .icone-check{
