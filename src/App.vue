@@ -61,14 +61,14 @@ export default {
     cartasItens.forEach(item => {
       cartaLista.value.push({
         valor: item,
-        visivel: true,
+        visivel: false,
         posicao: null,
         combinou: false
       })
 
       cartaLista.value.push({
         valor: item,
-        visivel: true,
+        visivel: false,
         posicao: null,
         combinou: false
       })
@@ -101,8 +101,10 @@ export default {
               cartaLista.value[carta1.posicao].combinou = true;
               cartaLista.value[carta2.posicao].combinou = true;
             } else {
-              cartaLista.value[carta1.posicao].visivel = false
-              cartaLista.value[carta2.posicao].visivel = false
+              setTimeout(() => {
+                cartaLista.value[carta1.posicao].visivel = false
+                cartaLista.value[carta2.posicao].visivel = false
+              }, 2000 )
             }
             usuarioSelecionou.value.length = 0
           }
