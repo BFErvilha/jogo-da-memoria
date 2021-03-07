@@ -1,11 +1,26 @@
 <template>
   <div class="titulo"> 
     <img src="../public/assets/img/abstergo_logo.png" alt="Abstergo"/>
-    <h1>Abstergo Memory</h1>
+    <h1>Abstergo's Memory</h1>
   </div>
-  <section class="subtitulo">
-    <p>Bem-vindo ao jogo da memória!</p>
-    <p>Tematizado com o jogo da ubisoft Assassin's Creed</p>  
+  <section class="placar">
+    <div class="nome">
+      <h2>{{ jogador }}</h2>
+    </div>
+    <div>
+        <button v-if="novoJogador" @click="iniciarJogo" class="btn">
+          <img src="../public/assets/img/play.svg" alt="Reiniciar icone"/>
+          Iniciar Jogo
+        </button>
+        <button v-else @click="reiniciar" class="btn">
+          <img src="../public/assets/img/restart.svg" alt="Reiniciar icone"/>
+          ReiniciarJogo
+        </button>
+    </div>
+    <div class="contador">
+        Tempo : {{ contador }}
+        Rodadas: {{ rodada }}
+    </div>
   </section>  
  <transition-group tag="section" name="embaralhar-cartas" class="tabuleiro">
    <Carta v-for="carta in cartaLista" :key="`${carta.valor}-${carta.variante}`" :valor="carta.valor"
@@ -15,14 +30,41 @@
    @carta-selecionada="virarCarta"/>
  </transition-group>
  <h2 class="status">{{ status }}</h2>
- <button v-if="novoJogador" @click="iniciarJogo" class="btn">
-   <img src="../public/assets/img/play.svg" alt="Reiniciar icone"/>
-   Iniciar Jogo
- </button>
- <button v-else @click="reiniciarJogo" class="btn">
-   <img src="../public/assets/img/restart.svg" alt="Reiniciar icone"/>
-   ReiniciarJogo
- </button>
+ <teleport to="#modal-inicio">
+   <div v-if="showMessage"> 
+      <transition name="modal">
+        <div class="modal-mask">
+          <div class="modal-wrapper">
+            <div class="modal-container">
+
+              <div class="modal-header">
+                <h3>Abstergo's Memory</h3>
+                <div class="subtitulo">
+                  <p>Bem-vindo ao jogo da memória!</p>
+                  <p>Tematizado com o jogo da ubisoft Assassin's Creed</p>  
+                </div> 
+              </div>
+
+              <div class="modal-body">
+                <slot name="body">
+                  <input v-model="jogador" label="Nome do Jogador" placeholder="Digite seu nome">
+                </slot>
+              </div>
+
+              <div class="modal-footer">
+                <slot name="footer">
+                  <button class="btn" @click="fecharModal">
+                    Continuar
+                  </button>
+                </slot>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>  
+   </div>
+ </teleport>
+ 
 </template>
 
 <script>
@@ -34,19 +76,49 @@ import Carta from "./components/Carta"
 export default {
   name: 'App',
   components:{
-    Carta
+    Carta,
+  },
+  data(){
+    return{ 
+      
+    }
   },
   setup(){
     const cartaLista = ref([])
     const usuarioSelecionou = ref ([])
     const novoJogador = ref(true)
+    const showMessage = ref(true)
+    const jogador = ref()
+
+    let contador = ref (0)
+    let rodada = ref (0)
+
+    const contarTempo = () => {
+      setInterval(() => {
+        contador.value +=1        
+      }, 1000 )
+    }
 
     const iniciarJogo = () => {
       novoJogador.value = false
+      reiniciarJogo()
+      setTimeout(() => {
+        contarTempo()         
+      }, 1000 )
+    }
+
+    const reiniciar = () => {
+      clearInterval()
+      contador.value = 0
+      rodada.value = 0
 
       reiniciarJogo()
     }
-    
+    const fecharModal = () => {
+      showMessage.value = false
+      jogador.value = this.nomeJogador
+    }
+
     const status = computed(()=> {
       if(paresRestantes.value === 0){
          return 'Parabéns, você venceu!'
@@ -129,11 +201,14 @@ export default {
             if(carta1.cartaValor == carta2.cartaValor) {
               cartaLista.value[carta1.posicao].combinou = true;
               cartaLista.value[carta2.posicao].combinou = true;
+              rodada.value += 1
             } else {
               setTimeout(() => {
                 cartaLista.value[carta1.posicao].visivel = false
                 cartaLista.value[carta2.posicao].visivel = false
               }, 2000 )
+
+              rodada.value += 1
             }
             usuarioSelecionou.value.length = 0
           }
@@ -145,7 +220,13 @@ export default {
         status,
         reiniciarJogo,
         iniciarJogo,
-        novoJogador
+        novoJogador,
+        fecharModal,
+        showMessage,
+        contarTempo,
+        contador,
+        reiniciar,
+        rodada
       }
 
   }
@@ -176,7 +257,7 @@ export default {
 }
 
 .subtitulo{
-  margin: 20px auto 40px;
+  margin: 50px auto ;
 }
 
 .subtitulo p{
@@ -206,7 +287,7 @@ export default {
   border-radius: 10px;
   color: #fff;
   padding: 0.75rem 0.5rem;
-  margin: 15px auto;
+  margin: 15px auto 25px;;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -226,5 +307,118 @@ export default {
 .embaralhar-cartas-move{
   transition: transform 0.8s ease-in
 }
+
+.placar{
+  display: grid;
+  grid-template-columns: repeat(3, 200px);
+  grid-template-rows: 100px;
+  grid-column-gap: 25px;
+  grid-row-gap: 25px;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+.placar .nome{
+  padding-top: 10px;
+}
+.placar .nome h2{
+  font-family: 'Assassin$ Regular';
+  font-size: 35px
+}
+
+.modal-mask {
+  position: fixed;
+  z-index: 9998;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: table;
+  transition: opacity 0.3s ease;
+}
+
+.modal-wrapper {
+  display: table-cell;
+  vertical-align: middle;
+}
+
+.modal-container {
+  width: 350px;
+  height: 420px;
+  margin: 0px auto;
+  padding: 20px 30px;
+  background-color: #172937;
+  border-radius: 5px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.33);
+  transition: all 0.3s ease;
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.modal-header{
+  text-align: center;
+  color: #fff
+}
+
+.modal-header h3 {
+  font-family: 'Assassin$ Regular';
+  font-size: 30px;
+}
+
+.modal-body {
+  margin: 20px 0;
+  text-align: center;
+}
+
+.modal-body input{
+  background-color: #172937;
+  border: none;
+  border-bottom: 1px solid #fff;
+  width: 250px;
+  height: 40px;
+  color: #fff;
+  text-align: center;
+}
+
+.modal-body input:focus{
+  outline: none;
+}
+
+.modal-default-button {
+  float: right;
+}
+
+.modal-footer{
+  margin-top: 90px;
+}
+
+.modal-footer button{
+  width: 200px;
+  font-family: 'Assassin$ Regular';
+  font-size: 25px;
+}
+/*
+ * The following styles are auto-applied to elements with
+ * transition="modal" when their visibility is toggled
+ * by Vue.js.
+ *
+ * You can easily play with the modal transition by editing
+ * these styles.
+ */
+
+.modal-enter {
+  opacity: 0;
+}
+
+.modal-leave-active {
+  opacity: 0;
+}
+
+.modal-enter .modal-container,
+.modal-leave-active .modal-container {
+  -webkit-transform: scale(1.1);
+  transform: scale(1.1);
+}
+
 
 </style>
