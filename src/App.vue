@@ -8,7 +8,7 @@
    @carta-selecionada="virarCarta"/>
  </section>
  <h2>{{ status }}</h2>
- <button @click="embaralharCartas">Embaralhar</button>
+ <button @click="reiniciarJogo">ReiniciarJogo</button>
 </template>
 
 <script>
@@ -43,10 +43,23 @@ export default {
       cartaLista.value = _.shuffle(cartaLista.value)
     }
 
+    const reiniciarJogo = () => {
+      embaralharCartas()
+
+      cartaLista.value = cartaLista.value.map((carta,index) => {
+        return { 
+          ...carta,
+          combinou: false,
+          posicao: index,
+          visivel: false
+        }
+      })
+    }
+
     for (let i = 0; i < 20; i++){
       cartaLista.value.push({
         valor: i,
-        visivel: true,
+        visivel: false,
         posicao: i,
         combinou: false
       })
@@ -68,13 +81,9 @@ export default {
             const carta2 = currentVlue[1]
 
             if(carta1.cartaValor == carta2.cartaValor) {
-              status.value = 'Combinou!'
-
               cartaLista.value[carta1.posicao].combinou = true;
               cartaLista.value[carta2.posicao].combinou = true;
-
             } else {
-              status.value = 'Não combinou!'
               cartaLista.value[carta1.posicao].visivel = false
               cartaLista.value[carta2.posicao].visivel = false
             }
@@ -86,7 +95,8 @@ export default {
         virarCarta,
         usuarioSelecionou,
         status,
-        embaralharCartas
+        embaralharCartas,
+        reiniciarJogo
       }
 
   }
