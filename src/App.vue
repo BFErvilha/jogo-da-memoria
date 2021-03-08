@@ -19,7 +19,7 @@
     </div>
     <div class="contador">
         Tempo : {{ contador }}
-        Rodadas: {{ rodada }}
+         Rodadas: {{ rodada }}
     </div>
   </section>  
  <transition-group tag="section" name="embaralhar-cartas" class="tabuleiro">
@@ -65,6 +65,42 @@
    </div>
  </teleport>
  
+ <teleport to="#modal-placar">
+   <div v-if="finalJogo"> 
+      <transition name="modal">
+        <div class="modal-mask">
+          <div class="modal-wrapper">
+            <div class="modal-container">
+
+              <div class="modal-header">
+                <h3>"Nothing is true, everything is permitted."</h3>
+              </div>
+
+              <div class="modal-body">
+                <slot name="body">
+                    <p><span>{{ jogador }}</span>, parabéns!</p>
+                    <p>Você venceu o jogo em <span>{{ rodada }}</span> rodadas e em <span>{{ tempoFinal }}</span> segundos.</p>
+                </slot>
+              </div>
+
+              <div class="modal-footer">
+                <slot name="footer">
+                  <button class="btn" @click="jogarNovamente">
+                    Jogar Novamente
+                  </button>
+                  
+                  <button class="btn" @click="outroJogador">
+                    Novo jogador
+                  </button>
+                </slot>
+              </div>
+            </div>
+          </div>
+        </div>
+      </transition>  
+   </div>
+ </teleport>
+ 
 </template>
 
 <script>
@@ -88,15 +124,41 @@ export default {
     const usuarioSelecionou = ref ([])
     const novoJogador = ref(true)
     const showMessage = ref(true)
+    const finalJogo = ref(false)
     const jogador = ref()
 
     let contador = ref (0)
     let rodada = ref (0)
+    let tempoFinal = ref(0)
 
     const contarTempo = () => {
       setInterval(() => {
         contador.value +=1        
       }, 1000 )
+    }
+
+    const jogarNovamente = () => {
+      finalJogo.value = false
+      clearInterval()
+      contador.value = 0
+      rodada.value = 0
+      reiniciar()
+      setTimeout(() => {
+        contarTempo()         
+      }, 1000 )
+    }
+
+    const outroJogador = () => {
+      finalJogo.value = false
+      contador.value = 0
+      rodada.value = 0
+
+      cartaLista.value.visivel = false
+
+      setTimeout(() => { 
+        novoJogador.value = true
+        showMessage.value = true         
+      }, 500 )
     }
 
     const iniciarJogo = () => {
@@ -108,7 +170,6 @@ export default {
     }
 
     const reiniciar = () => {
-      clearInterval()
       contador.value = 0
       rodada.value = 0
 
@@ -190,6 +251,10 @@ export default {
       watch(paresRestantes, currentValue => {
         if(currentValue === 0){
           soltarConfete()
+          setTimeout(() => {
+           finalJogo.value = true  
+           tempoFinal.value = contador.value
+          }, 1000 )
         }
       })
     
@@ -226,7 +291,11 @@ export default {
         contarTempo,
         contador,
         reiniciar,
-        rodada
+        rodada,
+        finalJogo,
+        tempoFinal,
+        jogarNovamente,
+        outroJogador
       }
 
   }
@@ -418,6 +487,39 @@ export default {
 .modal-leave-active .modal-container {
   -webkit-transform: scale(1.1);
   transform: scale(1.1);
+}
+
+#modal-placar .modal-container {
+  width: 600px;
+}
+
+#modal-placar  .modal-body{
+  margin: 106px auto;
+}
+
+#modal-placar  .modal-body p{
+  color: white;
+  font-size: 25px;
+}
+
+#modal-placar  .modal-body p span{
+  color: #08adff;;
+  font-weight: 900;
+}
+
+#modal-placar  .modal-body p:nth-child(1){
+  text-transform: capitalize;
+  font-size: 25px;
+}
+
+#modal-placar  .modal-body p:nth-child(1){
+  padding: 0 80px;
+}
+
+
+#modal-placar  .modal-footer{
+  display: flex;
+  justify-content: space-around;
 }
 
 
