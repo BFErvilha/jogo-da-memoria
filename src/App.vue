@@ -522,7 +522,7 @@ export default {
   justify-content: space-around;
 }
 
-@media only screen and (max-width: 600px) {
+/* @media only screen and (max-width: 600px) {
   .tabuleiro{
     grid-template-columns: repeat(3, 100px);
     grid-template-rows: repeat(3, 150px);
@@ -536,6 +536,6 @@ export default {
     flex: 1;
     padding: 0 10px;
   }
-}
+} */
 
 </style>
