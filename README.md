@@ -4,7 +4,7 @@ Desafio jogo da memória utilizando Vue.js 3
 
 # Demo
 
-See [Demo Jogo da Memória](https://jogo-da-memoria-bfervilha.vercel.app/).
+[Demo Jogo da Memória](https://jogo-da-memoria-bfervilha.vercel.app/).
 
 ## Project setup
 
