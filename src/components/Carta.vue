@@ -103,4 +103,11 @@ export default {
   right: 5px;
   top: 5px;
 }
+
+@media only screen and (max-width: 600px) {
+  .carta {
+      width: 100px;
+      height: 150px;
+  } 
+}   
 </style>

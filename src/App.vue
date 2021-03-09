@@ -522,12 +522,12 @@ export default {
   justify-content: space-around;
 }
 
-/* @media only screen and (max-width: 600px) {
+@media only screen and (max-width: 600px) {
   .tabuleiro{
-    grid-template-columns: repeat(3, 100px);
-    grid-template-rows: repeat(3, 150px);
-    grid-column-gap: 40px;
-    grid-row-gap: 40px;
+    display: flex;
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
   }
   .placar{
     display: flex;
@@ -536,6 +536,36 @@ export default {
     flex: 1;
     padding: 0 10px;
   }
-} */
+  .placar .nome {
+    width: 300px;
+  }
+
+  .modal-container {
+    width: 300px;
+  }  
+
+  #modal-placar .modal-container {
+    width: 300px;
+    height: auto;
+  }
+
+  #modal-placar .modal-body {
+    margin: 45px auto;
+  }
+
+  #modal-placar .modal-body p:nth-child(1) {
+    padding: 0px 45px;
+    margin-bottom: 10px;
+  }
+  
+  #modal-placar .modal-body p {
+      font-size: 22px;
+  }
+
+  #modal-placar .modal-footer button {
+    width: 134px;
+    font-size: 17px;
+  }
+}
 
 </style>
