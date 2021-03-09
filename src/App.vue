@@ -1,6 +1,6 @@
 <template>
   <div class="titulo"> 
-    <img src="../public/assets/img/abstergo_logo.png" alt="Abstergo"/>
+    <img src="@/assets/img/abstergo_logo.png" alt="Abstergo"/>
     <h1>Abstergo's Memory</h1>
   </div>
   <section class="placar">
