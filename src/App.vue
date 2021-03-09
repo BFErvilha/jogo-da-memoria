@@ -522,5 +522,20 @@ export default {
   justify-content: space-around;
 }
 
+@media only screen and (max-width: 600px) {
+  .tabuleiro{
+    grid-template-columns: repeat(3, 100px);
+    grid-template-rows: repeat(3, 150px);
+    grid-column-gap: 40px;
+    grid-row-gap: 40px;
+  }
+  .placar{
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    flex: 1;
+    padding: 0 10px;
+  }
+}
 
 </style>
