@@ -86,7 +86,8 @@ export default {
 
 .carta-face.frente{
   background-color: #172937;
-  color: white
+  color: white;
+  backface-visibility: initial;
 }
 
 .carta-face.frente img{
